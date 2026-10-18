@@ -1,14 +1,5 @@
 # CloudOps Sentinel
 
-Production-like DevOps learning project.
+CloudOps Sentinel is a hands-on DevOps project focused on building, automating, deploying, and monitoring a production-like environment using Docker, Kubernetes, Terraform, Ansible, CI/CD, cloud platforms, and observability tools.
 
-## Current stack
-
-- Docker Compose
-- Nginx reverse proxy
-- Nginx backend
-
-## Run
-
-```bash
-docker compose up -d
+![CloudOps Sentinel DevOps Roadmap](docs/cloudops-sentinel-roadmap.png)
