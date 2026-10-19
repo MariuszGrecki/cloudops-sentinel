@@ -1,10 +1,16 @@
 services:
   backend:
-    image: nginx:alpine
-    volumes:
-      - ./backend/html:/usr/share/nginx/html:ro
+    build:
+      context: ./backend
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      database:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8000/health"]
       interval: 10s
       timeout: 3s
       retries: 3
