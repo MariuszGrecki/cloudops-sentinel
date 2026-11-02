@@ -1,0 +1,28 @@
+name: CI
+
+on
+  push:
+    branches:
+      - main
+  pull-request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      POSTGRES_DB: sentinel
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: ci-test-POSTGRES_PASSWORD
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Validate Docker Compose
+        run: docker compose config
+
+      - name: Build backend image
+        run: docker compsoe build backend
