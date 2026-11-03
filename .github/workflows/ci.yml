@@ -12,6 +12,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     env:
       POSTGRES_DB: sentinel
       POSTGRES_USER: sentinel
@@ -36,15 +40,36 @@ jobs:
       - name: Smoke test
         run: |
           curl --fail \
-            --retry 10 \
-            --retry-connrefused \
-            --retry-delay 2 \
-            http://127.0.0.1:33388/health
+          --retry 10 \
+          --retry-connrefused \
+          --retry-delay 2 \
+          http://127.0.0.1:33388/health
 
       - name: Show logs on failure
         if: failure()
         run: docker compose logs
 
+      - name: Log in to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          push: true
+          tags: ghcr.io/mariuszgrecki/cloudops-sentinel-backend:latest
+
       - name: Stop application
         if: always()
         run: docker compose down
+
+      - name: Stop application
+        if: always()
+        run: docker compose down
+
