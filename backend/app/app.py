@@ -8,7 +8,7 @@ app = Flask(__name__)
 def index():
     return {
         "service": "cloudops-sentinel-backend",
-        "status": "running"
+        "status": "running",
     }
 
 @app.get("/health")

@@ -1,0 +1,5 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    image: cloudops-sentinel-backend:dev
