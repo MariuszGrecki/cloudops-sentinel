@@ -9,7 +9,8 @@ def index():
     return {
         "service": "cloudops-sentinel-backend",
         "status": "running",
-        "message": "changed"
+        "message": "changed",
+        "version": "broken-demo"
     }
 
 @app.get("/health")
