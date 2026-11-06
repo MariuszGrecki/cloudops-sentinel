@@ -9,6 +9,7 @@ def index():
     return {
         "service": "cloudops-sentinel-backend",
         "status": "running",
+        "message": "changed"
     }
 
 @app.get("/health")
@@ -35,4 +36,8 @@ def health():
             "error": str(error)
         }, 503
 
-app.run(host="0.0.0.0", port=8000)
+app.run(
+    host="0.0.0.0",
+    port=8000,
+    debug=os.getenv("FLASK_DEBUG") == "1"
+)

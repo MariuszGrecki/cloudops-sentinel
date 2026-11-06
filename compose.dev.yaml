@@ -2,4 +2,11 @@ services:
   backend:
     build:
       context: ./backend
+    
     image: cloudops-sentinel-backend:dev
+
+    volumes:
+      - ./backend/app:/app
+
+    environment:
+      FLASK_DEBUG: "1"
