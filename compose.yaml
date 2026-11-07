@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ghcr.io/mariuszgrecki/cloudops-sentinel-backend:latest
+    image: ghcr.io/mariuszgrecki/cloudops-sentinel-backend:d2f7401
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}

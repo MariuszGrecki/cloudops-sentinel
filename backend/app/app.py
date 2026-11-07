@@ -31,6 +31,8 @@ def health():
         }, 200
 
     except Exception as error:
+        app.logger.error("Database heath check failed: %s", error)
+
         return {
             "status": "unhealthy",
             "database": "disconnected",
