@@ -1,0 +1,33 @@
+---
+- name: Prepare CloudOps Sentinel host
+  hosts: local
+
+  vars:
+    app_name: cloudops-sentinel
+    app_env: production
+    app_port: 8001
+
+  tasks:
+    - name: Ensure application directory exists
+      become: true
+      ansible.builtin.file:
+        path: /opt/cloudops-sentinel
+        state: directory
+        owner: deploy
+        group: deployers
+        mode: '0755'
+
+    - name: Render application environment file
+      become: true
+      ansible.builtin.template:
+        src: templates/app.env.j2
+        dest: /opt/cloudops-sentinel/.env
+        owner: deploy
+        group: deployers
+        mode: '0640'
+      notify: Configuration changed
+
+  handlers:
+    - name: Configuration changed
+      ansible.builtin.debug:
+        msg: "Configuration changed - application restart would be required"
