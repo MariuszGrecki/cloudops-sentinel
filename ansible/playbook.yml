@@ -1,6 +1,6 @@
 ---
 - name: Prepare CloudOps Sentinel host
-  hosts: local
+  hosts: remote
 
   vars:
     app_name: cloudops-sentinel
@@ -26,6 +26,10 @@
         group: deployers
         mode: '0640'
       notify: Configuration changed
+
+    - name: Show server role
+      ansible.builtin.debug:
+        msg: "Server {{ inventory_hostname }} role is {{ server_role }}"
 
   handlers:
     - name: Configuration changed
