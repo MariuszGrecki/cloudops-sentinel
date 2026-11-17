@@ -31,6 +31,57 @@
       ansible.builtin.debug:
         msg: "Server {{ inventory_hostname }} role is {{ server_role }}"
 
+    - name: Check Docker version
+      ansible.builtin.command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Show Docker version
+      ansible.builtin.debug:
+        var: docker_version.stdout
+
+    - name: Ensure Docker service is running
+      become: true
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add deploy user to docker group
+      become: true
+      ansible.builtin.user:
+        name: deploy
+        groups:
+          - docker
+        append: true
+
+    - name: Ensure nginx config directory exists
+      become: true
+      ansible.builtin.file:
+        path: /opt/cloudops-sentinel/nginx
+        state: directory
+        owner: deploy
+        group: deployers
+        mode: '0755'
+
+    - name: Render nginx Configuration
+      become: true
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /opt/cloudops-sentinel/nginx/default.conf
+        owner: deploy
+        group: deployers
+        mode: '0644'
+
+    - name: Render production Docker Compose file
+      become: true
+      ansible.builtin.template:
+        src: templates/compose.yaml.j2
+        dest: /opt/cloudops-sentinel/compose.yaml
+        owner: deploy
+        group: deployers
+        mode: '0644'
+
   handlers:
     - name: Configuration changed
       ansible.builtin.debug:

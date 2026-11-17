@@ -1,2 +1,6 @@
 ---
 server_role: development
+backend_image_tag: d2f7401
+
+postgres_db: sentinel
+postgres_user: sentinel
